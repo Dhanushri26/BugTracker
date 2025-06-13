@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import fileimage from "../images/folder.png";
+import CreateBug from './CreateBug';
 const classes = {
   root:{
     height: '100%',
@@ -21,6 +22,13 @@ const classes = {
   }
 }
 const BugPage = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  }
   return (
     <Box sx={classes.root}>
      <Typography sx={classes.title}>
@@ -29,9 +37,14 @@ const BugPage = () => {
      <Typography sx={classes.title}>
       Let's Track and review your bugs here !!
      </Typography>
-     <Box sx={classes.img} onClick={()=>alert("Let's create a new msg")}>
+     <Box sx={classes.img} onClick={handleOpen}>
       <img src={fileimage} alt="bug" width="40px" height="40px"/>
      </Box>
+     <CreateBug open = {open} close = {handleClose} />
+     <Button variant="contained" onClick={handleOpen} sx={{marginTop: "20px"}}>
+      Open Bug Tracker
+     </Button>
+     
     </Box>
   )
 }
