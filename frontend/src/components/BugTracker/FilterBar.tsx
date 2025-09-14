@@ -1,0 +1,87 @@
+import React from 'react';
+import { Search, Filter, Star } from 'lucide-react';
+
+interface FilterBarProps {
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
+  difficultyFilter: string;
+  onDifficultyFilterChange: (value: string) => void;
+  showFavoritesOnly: boolean;
+  onToggleFavorites: () => void;
+}
+
+export function FilterBar({
+  searchTerm,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
+  difficultyFilter,
+  onDifficultyFilterChange,
+  showFavoritesOnly,
+  onToggleFavorites,
+}: FilterBarProps) {
+  return (
+    <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Search */}
+        <div className="flex-1">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search bugs by title or tags..."
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap gap-3">
+          <div className="flex items-center space-x-2">
+            <Filter className="h-4 w-4 text-gray-500" />
+            <select
+              value={statusFilter}
+              onChange={(e) => onStatusFilterChange(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="">All Status</option>
+              <option value="Open">Open</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Testing">Testing</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </div>
+
+          <select
+            value={difficultyFilter}
+            onChange={(e) => onDifficultyFilterChange(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">All Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+            <option value="Critical">Critical</option>
+          </select>
+
+          <button
+            onClick={onToggleFavorites}
+            className={`flex items-center space-x-2 px-3 py-2 rounded-lg border transition-colors ${
+              showFavoritesOnly
+                ? 'bg-yellow-50 border-yellow-300 text-yellow-700'
+                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <Star className={`h-4 w-4 ${showFavoritesOnly ? 'fill-current' : ''}`} />
+            <span>Favorites</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
