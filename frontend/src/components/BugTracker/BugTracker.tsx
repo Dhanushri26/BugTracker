@@ -80,22 +80,22 @@ export function BugTracker() {
   };
 
   const handleToggleFavorite = (bugId: string) => {
-    toggleFavorite(bugId);
+    toggleFavorite(bugId, { is_favorite: !bugs.find(bug => bug.id === bugId)?.is_favorite });
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="text-gray-600 mt-4">Loading bugs...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="text-neutral-600 mt-4">Loading bugs...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       <Header onAddBug={handleAddBug} />
 
       <main className="max-w-7xl mx-auto">
@@ -113,25 +113,25 @@ export function BugTracker() {
         <div className="p-6">
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500">Total Bugs</h3>
-              <p className="text-2xl font-bold text-gray-900">{bugs.length}</p>
+            <div className="card p-5">
+              <h3 className="text-sm font-medium text-neutral-500">Total Bugs</h3>
+              <p className="text-3xl font-bold text-neutral-900 tracking-tight">{bugs.length}</p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500">Open</h3>
-              <p className="text-2xl font-bold text-red-600">
+            <div className="card p-5">
+              <h3 className="text-sm font-medium text-neutral-500">Open</h3>
+              <p className="text-3xl font-bold text-danger-600 tracking-tight">
                 {bugs.filter(b => b.status === 'Open').length}
               </p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500">In Progress</h3>
-              <p className="text-2xl font-bold text-yellow-600">
+            <div className="card p-5">
+              <h3 className="text-sm font-medium text-neutral-500">In Progress</h3>
+              <p className="text-3xl font-bold text-warning-600 tracking-tight">
                 {bugs.filter(b => b.status === 'In Progress').length}
               </p>
             </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500">Resolved</h3>
-              <p className="text-2xl font-bold text-green-600">
+            <div className="card p-5">
+              <h3 className="text-sm font-medium text-neutral-500">Resolved</h3>
+              <p className="text-3xl font-bold text-success-600 tracking-tight">
                 {bugs.filter(b => b.status === 'Resolved').length}
               </p>
             </div>
@@ -139,13 +139,13 @@ export function BugTracker() {
 
           {/* Bug List */}
           {filteredBugs.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-              <p className="text-gray-500 text-lg mb-4">
+            <div className="card p-12 text-center">
+              <p className="text-neutral-500 text-lg mb-4">
                 {bugs.length === 0 ? 'No bugs reported yet' : 'No bugs match your filters'}
               </p>
               <button
                 onClick={handleAddBug}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="btn-primary px-6"
               >
                 Add Your First Bug
               </button>

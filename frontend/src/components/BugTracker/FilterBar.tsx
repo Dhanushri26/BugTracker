@@ -23,18 +23,18 @@ export function FilterBar({
   onToggleFavorites,
 }: FilterBarProps) {
   return (
-    <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-neutral-200 px-6 py-4">
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Search */}
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-neutral-400" />
             <input
               type="text"
               placeholder="Search bugs by title or tags..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="input pl-10"
             />
           </div>
         </div>
@@ -42,11 +42,11 @@ export function FilterBar({
         {/* Filters */}
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center space-x-2">
-            <Filter className="h-4 w-4 text-gray-500" />
+            <Filter className="h-4 w-4 text-neutral-500" />
             <select
               value={statusFilter}
               onChange={(e) => onStatusFilterChange(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="select"
             >
               <option value="">All Status</option>
               <option value="Open">Open</option>
@@ -60,7 +60,7 @@ export function FilterBar({
           <select
             value={difficultyFilter}
             onChange={(e) => onDifficultyFilterChange(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="select"
           >
             <option value="">All Difficulty</option>
             <option value="Easy">Easy</option>
@@ -73,8 +73,8 @@ export function FilterBar({
             onClick={onToggleFavorites}
             className={`flex items-center space-x-2 px-3 py-2 rounded-lg border transition-colors ${
               showFavoritesOnly
-                ? 'bg-yellow-50 border-yellow-300 text-yellow-700'
-                : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                ? 'bg-warning-50 border-warning-300 text-warning-700'
+                : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-50'
             }`}
           >
             <Star className={`h-4 w-4 ${showFavoritesOnly ? 'fill-current' : ''}`} />
