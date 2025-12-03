@@ -8,14 +8,12 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors({
-  origin: "http://localhost:5173",   // your Vite frontend
+  origin: "http://localhost:5173",   
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-// Middleware
 app.use(bodyParser.json());
 
-// Routes
 app.use("/bugs", bugRoutes);
 app.use("/users", userRoutes);
 
