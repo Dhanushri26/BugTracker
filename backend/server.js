@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { sequelize } = require("./models");
 const bugRoutes = require("./routes/bugroutes");
+const userRoutes  = require("./routes/userroutes");
+
 const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +17,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/bugs", bugRoutes);
+app.use("/users", userRoutes);
 
 sequelize
   .authenticate()
