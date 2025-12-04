@@ -58,6 +58,8 @@ export function LandingPage({ onGetStarted }: LandingPageProps) {
               Report and track bugs instantly with our streamlined interface designed for speed and efficiency.
             </p>
           </div>
+          {/* Login part */}
+          
 
           <div className="text-center p-8 card">
             <div className="bg-success-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
