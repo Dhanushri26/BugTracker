@@ -42,6 +42,16 @@ class UserController {
       res.status(500).json({ error: err.message });
     }
   }
+
+  static async getUserByEmail(req, res) {
+    try {
+      const { email } = req.params;
+      const user = await UserService.getUserByEmail(email);
+      return res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
 }
 
 module.exports = UserController;

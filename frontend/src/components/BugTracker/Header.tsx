@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bug, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 interface HeaderProps {
   onAddBug: () => void;
@@ -11,11 +11,9 @@ export function Header({ onAddBug }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="bg-primary-600 p-2 rounded-lg shadow-sm">
-              <Bug className="h-6 w-6 text-white" />
-            </div>
+
             <div>
-              <h1 className="text-2xl font-bold text-neutral-900">BugTracker Pro</h1>
+              <h1 className="text-2xl font-bold text-neutral-900">BugTracker</h1>
               <p className="text-sm text-neutral-600">Manage and track your bugs efficiently</p>
             </div>
           </div>

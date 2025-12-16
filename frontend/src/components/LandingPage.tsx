@@ -1,96 +1,262 @@
-import React from 'react';
-import { Bug, Users, Zap, Shield } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from "react";
+import { Users, Zap, Shield } from "lucide-react";
 
 interface LandingPageProps {
   onGetStarted: () => void;
 }
 
 export function LandingPage({ onGetStarted }: LandingPageProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [mode, setMode] = useState<"login" | "signup">("login");
+const [name, setName] = useState("");
+
+const handleAuth = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+
+  try {
+    let res;
+    let data;
+
+    if (mode === "login") {
+      res = await fetch(
+        `http://localhost:3000/users/${encodeURIComponent(email)}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("User not found");
+      }
+
+      data = await res.json();
+
+      if (data.password !== password) {
+        throw new Error("Invalid credentials");
+      }
+
+    } else {
+      // ✅ SIGN UP
+      res = await fetch("http://localhost:3000/users/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Signup failed");
+      }
+
+      data = await res.json();
+    }
+
+    console.log(`${mode} success`, data);
+    onGetStarted();
+
+  } catch (err: any) {
+    setError(err.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  // const handleLogin = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   setLoading(true);
+  //   console.log(name);
+  //   console.log(email);
+  //   console.log(password);
+
+  //   try {
+  //     const res = await fetch("http://localhost:3000/users/create", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ name,email, password }),
+  //     });
+
+  //     if (!res.ok) {
+  //       throw new Error("Invalid credentials");
+  //     }
+
+  //     const data = await res.json();
+  //     console.log("Login success:", data);
+
+  //     // store token if needed
+  //     // localStorage.setItem("token", data.token);
+
+  //     onGetStarted();
+  //   } catch (err: any) {
+  //     setError(err.message || "Login failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+ return (
+  <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      
+      {/* LEFT: HERO */}
+      <div>
+        <h2 className="text-4xl md:text-6xl font-bold text-neutral-900 mb-6">
+          Track Bugs with
+          <span className="text-primary-600 block">Precision & Ease</span>
+        </h2>
+
+        <p className="text-xl text-neutral-600 mb-10">
+          Organize, prioritize, and kill bugs faster with a tracker that
+          actually respects your time.
+        </p>
+
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <Feature
+            icon={<Zap className="h-6 w-6 text-info-600" />}
+            title="Fast"
+            desc="Log bugs in seconds. No nonsense."
+          />
+          <Feature
+            icon={<Users className="h-6 w-6 text-success-600" />}
+            title="Collaborative"
+            desc="Your whole team, synced."
+          />
+          <Feature
+            icon={<Shield className="h-6 w-6 text-primary-600" />}
+            title="Secure"
+            desc="Your data stays locked."
+          />
+        </div>
+      </div>
+
+      {/* RIGHT: LOGIN */}
+     <div className="bg-white rounded-2xl shadow-xl p-8 border border-neutral-200 w-full max-w-lg">
+
+  {/* TOGGLE */}
+  <div className="flex bg-neutral-100 rounded-lg p-1 mb-6">
+    <button
+      onClick={() => setMode("login")}
+      className={`flex-1 py-2 text-sm font-semibold rounded-md transition
+        ${mode === "login"
+          ? "bg-white shadow text-primary-600"
+          : "text-neutral-500"}`}
+    >
+      Login
+    </button>
+    <button
+      onClick={() => setMode("signup")}
+      className={`flex-1 py-2 text-sm font-semibold rounded-md transition
+        ${mode === "signup"
+          ? "bg-white shadow text-primary-600"
+          : "text-neutral-500"}`}
+    >
+      Sign Up
+    </button>
+  </div>
+
+  <h3 className="text-2xl font-semibold text-neutral-900 mb-6 text-center">
+    {mode === "login" ? "Welcome back" : "Create your account"}
+  </h3>
+
+  <form onSubmit={handleAuth} className="space-y-5">
+
+    {mode === "signup" && (
+      <div>
+        <label className="block text-sm font-medium text-neutral-700">
+          Name
+        </label>
+        <input
+          type="text"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="mt-1 w-full rounded-lg border border-neutral-300 px-4 py-2 focus:ring-2 focus:ring-primary-500"
+          placeholder="Your name"
+        />
+      </div>
+    )}
+
+    <div>
+      <label className="block text-sm font-medium text-neutral-700">
+        Email
+      </label>
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="mt-1 w-full rounded-lg border border-neutral-300 px-4 py-2 focus:ring-2 focus:ring-primary-500"
+        placeholder="you@example.com"
+      />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium text-neutral-700">
+        Password
+      </label>
+      <input
+        type="password"
+        required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="mt-1 w-full rounded-lg border border-neutral-300 px-4 py-2 focus:ring-2 focus:ring-primary-500"
+        placeholder="••••••••"
+      />
+    </div>
+
+    {error && <p className="text-sm text-red-600">{error}</p>}
+
+    <button
+      type="submit"
+      disabled={loading}
+      className="w-full btn-primary py-2 font-semibold disabled:opacity-60"
+    >
+      {loading
+        ? mode === "login"
+          ? "Logging in..."
+          : "Creating account..."
+        : mode === "login"
+        ? "Login"
+        : "Sign Up"}
+    </button>
+  </form>
+
+  <p className="text-sm text-neutral-500 mt-4 text-center">
+    {mode === "login"
+      ? "New here? Switch to Sign Up"
+      : "Already have an account? Switch to Login"}
+  </p>
+</div>
+
+
+    </div>
+  </div>
+);
+
+}
+
+/* Small Feature Component */
+function Feature({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-info-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-neutral-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="bg-primary-600 p-2 rounded-lg shadow-sm">
-                <Bug className="h-6 w-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-neutral-900">BugTracker Pro</h1>
-            </div>
-            <button
-              onClick={onGetStarted}
-              className="btn-primary px-6"
-            >
-              Get Started
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center">
-          <h2 className="text-4xl md:text-6xl font-bold text-neutral-900 mb-6 tracking-tight">
-            Track Bugs with
-            <span className="text-primary-600 block">Precision & Ease</span>
-          </h2>
-          <p className="text-xl text-neutral-600 mb-10 max-w-3xl mx-auto">
-            Streamline your development workflow with our comprehensive bug tracking system. 
-            Organize, prioritize, and resolve issues efficiently with our intuitive interface.
-          </p>
-          <button
-            onClick={onGetStarted}
-            className="btn-primary px-8 py-3 text-lg font-semibold shadow-elevated hover:scale-[1.02] active:scale-[0.99] transition-transform"
-          >
-            Start Tracking Bugs
-          </button>
-        </div>
-
-        {/* Features */}
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center p-8 card">
-            <div className="bg-info-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Zap className="h-8 w-8 text-info-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">Lightning Fast</h3>
-            <p className="text-neutral-600">
-              Report and track bugs instantly with our streamlined interface designed for speed and efficiency.
-            </p>
-          </div>
-          {/* Login part */}
-          
-
-          <div className="text-center p-8 card">
-            <div className="bg-success-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Users className="h-8 w-8 text-success-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">Team Collaboration</h3>
-            <p className="text-neutral-600">
-              Work together seamlessly with shared bug reports, comments, and real-time status updates.
-            </p>
-          </div>
-
-          <div className="text-center p-8 card">
-            <div className="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="h-8 w-8 text-primary-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">Secure & Reliable</h3>
-            <p className="text-neutral-600">
-              Your data is protected with enterprise-grade security and backed up with reliable infrastructure.
-            </p>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-t border-neutral-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-neutral-600">
-            <p>&copy; 2025 BugTracker Pro. Built for developers, by developers.</p>
-          </div>
-        </div>
-      </footer>
+    <div className="p-4 rounded-xl border border-neutral-200 bg-white">
+      <div className="mb-2">{icon}</div>
+      <h4 className="font-semibold">{title}</h4>
+      <p className="text-sm text-neutral-600">{desc}</p>
     </div>
   );
 }
