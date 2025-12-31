@@ -43,18 +43,28 @@ export function FilterBar({
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center space-x-2">
             <Filter className="h-4 w-4 text-neutral-500" />
-            <select
-              value={statusFilter}
-              onChange={(e) => onStatusFilterChange(e.target.value)}
-              className="select"
-            >
-              <option value="">All Status</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Testing">Testing</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
-            </select>
+           <div className="relative w-64">
+  <select
+    value={statusFilter}
+    onChange={(e) => onStatusFilterChange(e.target.value)}
+    className="w-full appearance-none rounded-md border border-gray-300 bg-white px-2 py-2 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  >
+    <option value="">All Status</option>
+    <option value="Open">Open</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Testing">Testing</option>
+    <option value="Resolved">Resolved</option>
+    <option value="Closed">Closed</option>
+  </select>
+
+  {/* Custom Image Arrow */}
+  <img
+    src="../assets/sorting.png"   // or png
+    alt=""
+    className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-70"
+  />
+</div>
+
           </div>
 
           <select
