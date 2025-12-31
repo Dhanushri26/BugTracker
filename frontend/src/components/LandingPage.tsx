@@ -33,13 +33,14 @@ const handleAuth = async (e: React.FormEvent) => {
       );
 
       if (!res.ok) {
-        throw new Error("User not found");
+        // Show a friendly, consistent error for missing user or other auth failures
+        throw new Error("Please check your email and password");
       }
 
       data = await res.json();
 
-      if (data.password !== password) {
-        throw new Error("Invalid credentials");
+      if (!data || data.password !== password) {
+        throw new Error("Please check your email and password");
       }
 
     } else {
@@ -229,9 +230,29 @@ const handleAuth = async (e: React.FormEvent) => {
   </form>
 
   <p className="text-sm text-neutral-500 mt-4 text-center">
-    {mode === "login"
-      ? "New here? Switch to Sign Up"
-      : "Already have an account? Switch to Login"}
+    {mode === "login" ? (
+      <span>
+        New here?{" "}
+        <button
+          type="button"
+          onClick={() => setMode("signup")}
+          className="underline text-primary-600 font-semibold focus:outline-none"
+        >
+          Sign Up
+        </button>
+      </span>
+    ) : (
+      <span>
+        Already have an account?{" "}
+        <button
+          type="button"
+          onClick={() => setMode("login")}
+          className="underline text-primary-600 font-semibold focus:outline-none"
+        >
+          Login
+        </button>
+      </span>
+    )}
   </p>
 </div>
 

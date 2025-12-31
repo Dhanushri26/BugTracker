@@ -47,6 +47,9 @@ class UserController {
     try {
       const { email } = req.params;
       const user = await UserService.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
       return res.json(user);
     } catch (err) {
       res.status(500).json({ error: err.message });
