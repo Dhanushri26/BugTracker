@@ -11,22 +11,33 @@ interface BugCardProps {
 export function BugCard({ bug, onToggleFavorite, onEdit }: BugCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Open': return 'bg-red-100 text-red-800';
-      case 'In Progress': return 'bg-yellow-100 text-yellow-800';
-      case 'Testing': return 'bg-blue-100 text-blue-800';
-      case 'Resolved': return 'bg-green-100 text-green-800';
-      case 'Closed': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Open':
+        return 'bg-danger-50 text-danger-700 ring-danger-100';
+      case 'In Progress':
+        return 'bg-warning-50 text-warning-700 ring-warning-100';
+      case 'Testing':
+        return 'bg-info-50 text-info-700 ring-info-100';
+      case 'Resolved':
+        return 'bg-success-50 text-success-700 ring-success-100';
+      case 'Closed':
+        return 'bg-neutral-100 text-neutral-700 ring-neutral-200';
+      default:
+        return 'bg-neutral-100 text-neutral-700 ring-neutral-200';
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'Easy': return 'bg-green-100 text-green-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800';
-      case 'Hard': return 'bg-orange-100 text-orange-800';
-      case 'Critical': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'Easy':
+        return 'bg-success-50 text-success-700 ring-success-100';
+      case 'Medium':
+        return 'bg-warning-50 text-warning-700 ring-warning-100';
+      case 'Hard':
+        return 'bg-accent-50 text-accent-700 ring-accent-100';
+      case 'Critical':
+        return 'bg-danger-50 text-danger-700 ring-danger-100';
+      default:
+        return 'bg-neutral-100 text-neutral-700 ring-neutral-200';
     }
   };
 
