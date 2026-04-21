@@ -14,6 +14,11 @@ const databaseUrl = process.env.DATABASE_URL || (config.use_env_variable ? proce
 if (databaseUrl) {
   sequelize = new Sequelize(databaseUrl, config);
 } else {
+  if (env === 'production') {
+    throw new Error(
+      'DATABASE_URL is not set. Configure DATABASE_URL in your Render backend service environment variables.'
+    );
+  }
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
