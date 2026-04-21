@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../lib/api';
+import type { Bug } from '../lib/supabase';
 export function useBugs() {
   const [bugs, setBugs] = useState<Bug[]>([]);
   const [loading, setLoading] = useState(true);
- const endpoint = "https://bugtracker-8kty.onrender.com/bugs";
+ const endpoint = `${API_BASE_URL}/bugs`;
   useEffect(() => {
     const timer = setTimeout(() => {
       axios.get(endpoint).then(response => {
@@ -19,11 +21,13 @@ export function useBugs() {
   }, []);
 
   const addBug = (bugData: Omit<Bug, 'id' | 'created_at' | 'updated_at' | 'created_by'>) => {
+    const now = new Date().toISOString();
     const newBug: Bug = {
       ...bugData,
-      // id: Date.now().toString(),
-
-      is_favorite:false,
+      id: `temp-${Date.now()}`,
+      created_at: now,
+      updated_at: now,
+      is_favorite: false,
       created_by: 'current-user'
     };
     setBugs(prev => [newBug, ...prev]);

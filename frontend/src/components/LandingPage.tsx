@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Users, Zap, Shield } from "lucide-react";
+import { API_BASE_URL } from "../lib/api";
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -25,7 +26,7 @@ const handleAuth = async (e: React.FormEvent) => {
 
     if (mode === "login") {
       res = await fetch(
-        `https://bugtracker-8kty.onrender.com/users/${encodeURIComponent(email)}`,
+        `${API_BASE_URL}/users/${encodeURIComponent(email)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -45,7 +46,7 @@ const handleAuth = async (e: React.FormEvent) => {
 
     } else {
       // ✅ SIGN UP
-      res = await fetch("http://localhost:3000/users/create", {
+      res = await fetch(`${API_BASE_URL}/users/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
