@@ -14,8 +14,8 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable": "mysql://postgres:postgres@127.0.0.1:3306/bug_database",
-    "dialect": "mysql",
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
