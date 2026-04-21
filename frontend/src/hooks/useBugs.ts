@@ -3,7 +3,7 @@ import axios from 'axios';
 export function useBugs() {
   const [bugs, setBugs] = useState<Bug[]>([]);
   const [loading, setLoading] = useState(true);
- const endpoint = "http://localhost:3000/bugs";
+ const endpoint = "https://bugtracker-8kty.onrender.com/bugs";
   useEffect(() => {
     const timer = setTimeout(() => {
       axios.get(endpoint).then(response => {

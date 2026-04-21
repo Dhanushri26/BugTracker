@@ -25,7 +25,7 @@ const handleAuth = async (e: React.FormEvent) => {
 
     if (mode === "login") {
       res = await fetch(
-        `http://localhost:3000/users/${encodeURIComponent(email)}`,
+        `https://bugtracker-8kty.onrender.com/users/${encodeURIComponent(email)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
