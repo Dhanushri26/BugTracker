@@ -19,6 +19,16 @@ class BugController {
     }
   }
 
+  static async getBugsByTeam(req, res) {
+    try {
+      const { team } = req.params;
+      const bugs = await BugService.getBugsByTeam(team);
+      res.json(bugs);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   static async getBugById(req, res) {
     try {
       const bug = await BugService.getBugById(req.params.id);

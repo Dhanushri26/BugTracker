@@ -9,6 +9,10 @@ class BugService {
     return await Bug.findAll();
   }
 
+  static async getBugsByTeam(team) {
+    return await Bug.findAll({ where: { team } });
+  }
+
   static async getBugById(id) {
     return await Bug.findByPk(id);
   }
@@ -28,3 +32,4 @@ class BugService {
 }
 
 module.exports = BugService;
+

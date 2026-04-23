@@ -1,13 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+// Local types (no longer using Supabase)
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export type LocalUser = {
+  id?: string;
+  name: string;
+  email: string;
+  team: string;
+  isVerified?: boolean;
+};
 
 export type Bug = {
   id: string;
@@ -25,4 +24,12 @@ export type Bug = {
   created_at: string;
   updated_at: string;
   created_by: string;
+  team: string;
+};
+
+export type TeamUser = {
+  id: string;
+  name: string;
+  email: string;
+  team: string;
 };

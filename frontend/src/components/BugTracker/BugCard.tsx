@@ -110,9 +110,17 @@ export function BugCard({ bug, onToggleFavorite, onEdit }: BugCardProps) {
 
         {/* Footer */}
         <div className="flex items-center justify-between text-sm text-neutral-500 pt-4 border-t border-neutral-100">
-          <div className="flex items-center space-x-1">
-            <Calendar className="h-4 w-4" />
-            <span>{new Date(bug.created_at).toLocaleDateString()}</span>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Calendar className="h-4 w-4" />
+              <span>{new Date(bug.created_at).toLocaleDateString()}</span>
+            </div>
+            {bug.created_by && (
+              <div className="flex items-center space-x-1 text-neutral-600">
+                <span className="font-medium">Created by:</span>
+                <span className="text-primary-600 font-semibold">{bug.created_by}</span>
+              </div>
+            )}
           </div>
           {bug.images.length > 0 && (
             <span className="text-primary-600">{bug.images.length} image(s)</span>

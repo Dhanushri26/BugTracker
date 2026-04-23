@@ -79,6 +79,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      team: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Default'
+      },
     },
     {
       sequelize,

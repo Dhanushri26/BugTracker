@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Bug } from '../../data/mockBugs';
 import { useBugs } from '../../hooks/useBugs';
+import { useAuth } from '../../contexts/AuthContext';
 import { Header } from './Header';
 import { FilterBar } from './FilterBar';
 import { BugCard } from './BugCard';
 import { BugForm } from './BugForm';
+import { TeamSelector } from './TeamSelector';
 
 export function BugTracker() {
-  const { bugs, loading, addBug, updateBug, toggleFavorite } = useBugs();
+  const { team, userName, setTeam } = useAuth();
+  const { bugs, loading, addBug, updateBug, toggleFavorite } = useBugs(team);
   const [filteredBugs, setFilteredBugs] = useState<Bug[]>([]);
   const [formLoading, setFormLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingBug, setEditingBug] = useState<Bug | null>(null);
+  const [showTeamSelector, setShowTeamSelector] = useState(false);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,7 +74,11 @@ export function BugTracker() {
       if (editingBug) {
         updateBug(editingBug.id, bugData);
       } else {
-        addBug(bugData as Omit<Bug, 'id' | 'created_at' | 'updated_at' | 'created_by'>);
+        addBug(
+          bugData as Omit<Bug, 'id' | 'created_at' | 'updated_at' | 'team'>,
+          userName || 'Unknown',
+          team || 'Default'
+        );
       }
       
       setShowForm(false);
@@ -97,6 +105,13 @@ export function BugTracker() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Header onAddBug={handleAddBug} />
+      
+      <TeamSelector 
+        currentTeam={team} 
+        onTeamChange={setTeam}
+        isOpen={showTeamSelector}
+        onClose={() => setShowTeamSelector(false)}
+      />
 
       <main className="max-w-7xl mx-auto">
         <FilterBar

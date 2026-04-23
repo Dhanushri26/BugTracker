@@ -5,9 +5,12 @@ import { supabase } from '../lib/supabase';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<void>;
+  team: string | null;
+  userName: string | null;
+  signUp: (email: string, password: string, name: string, team: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  setTeam: (team: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,8 +26,16 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [team, setTeamState] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
+    // Load from localStorage on mount
+    const savedTeam = localStorage.getItem('userTeam');
+    const savedUserName = localStorage.getItem('userName');
+    if (savedTeam) setTeamState(savedTeam);
+    if (savedUserName) setUserName(savedUserName);
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setLoading(false);
@@ -38,15 +49,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, name: string, team: string) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: window.location.origin,
+        data: {
+          name,
+          team
+        }
       }
     });
     if (error) throw error;
+    
+    // Store team and name in localStorage
+    localStorage.setItem('userTeam', team);
+    localStorage.setItem('userName', name);
+    setTeamState(team);
+    setUserName(name);
   };
 
   const signIn = async (email: string, password: string) => {
@@ -60,14 +81,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    
+    // Clear localStorage
+    localStorage.removeItem('userTeam');
+    localStorage.removeItem('userName');
+    setTeamState(null);
+    setUserName(null);
+  };
+
+  const setTeam = (newTeam: string) => {
+    setTeamState(newTeam);
+    localStorage.setItem('userTeam', newTeam);
   };
 
   const value = {
     user,
     loading,
+    team,
+    userName,
     signUp,
     signIn,
     signOut,
+    setTeam,
   };
 
   return (

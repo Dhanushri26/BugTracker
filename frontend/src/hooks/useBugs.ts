@@ -2,13 +2,20 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../lib/api';
 import type { Bug } from '../lib/supabase';
-export function useBugs() {
+
+export function useBugs(team?: string | null) {
   const [bugs, setBugs] = useState<Bug[]>([]);
   const [loading, setLoading] = useState(true);
- const endpoint = `${API_BASE_URL}/bugs`;
+  const endpoint = `${API_BASE_URL}/bugs`;
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      axios.get(endpoint).then(response => {
+      let url = endpoint;
+      if (team) {
+        url = `${endpoint}/team/${encodeURIComponent(team)}`;
+      }
+
+      axios.get(url).then(response => {
         console.log(response.data);
         setBugs(response.data);
       }).catch(error => {
@@ -18,9 +25,9 @@ export function useBugs() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [team]);
 
-  const addBug = (bugData: Omit<Bug, 'id' | 'created_at' | 'updated_at' | 'created_by'>) => {
+  const addBug = (bugData: Omit<Bug, 'id' | 'created_at' | 'updated_at' | 'team'>, userName: string, team: string) => {
     const now = new Date().toISOString();
     const newBug: Bug = {
       ...bugData,
@@ -28,7 +35,8 @@ export function useBugs() {
       created_at: now,
       updated_at: now,
       is_favorite: false,
-      created_by: 'current-user'
+      created_by: userName,
+      team: team
     };
     setBugs(prev => [newBug, ...prev]);
 

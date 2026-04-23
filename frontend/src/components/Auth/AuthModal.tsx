@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Mail, Lock } from 'lucide-react';
+import { X, Mail, Lock, Users } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface AuthModalProps {
@@ -11,6 +11,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [team, setTeamInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,11 +25,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     try {
       if (isSignUp) {
-        await signUp(email, password);
+        if (!name || !team) {
+          setError('Name and Team are required for sign up');
+          setLoading(false);
+          return;
+        }
+        await signUp(email, password, name, team);
       } else {
         await signIn(email, password);
       }
       onClose();
+      setEmail('');
+      setPassword('');
+      setName('');
+      setTeamInput('');
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
@@ -56,6 +67,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
               {error}
+            </div>
+          )}
+
+          {isSignUp && (
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your name"
+                required={isSignUp}
+              />
             </div>
           )}
 
@@ -95,6 +123,26 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
           </div>
 
+          {isSignUp && (
+            <div>
+              <label htmlFor="team" className="block text-sm font-medium text-gray-700 mb-1">
+                Team/Group Name
+              </label>
+              <div className="relative">
+                <Users className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  id="team"
+                  value={team}
+                  onChange={(e) => setTeamInput(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., Frontend Team, Backend Team"
+                  required={isSignUp}
+                />
+              </div>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}
@@ -106,7 +154,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <div className="text-center">
             <button
               type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setName('');
+                setTeamInput('');
+                setError('');
+              }}
               className="text-blue-600 hover:text-blue-700 text-sm transition-colors"
             >
               {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}

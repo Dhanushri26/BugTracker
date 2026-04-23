@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     isVerified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    team: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'Default'
     }
   }, {
     sequelize,
